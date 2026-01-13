@@ -1,0 +1,92 @@
+services:
+  # PHP-FPM
+  php-job-forge:
+    build:
+      context: ./docker
+      dockerfile: php.Dockerfile
+    container_name: php-job-forge
+    restart: unless-stopped
+    volumes:
+      - .:/var/www/job-forge
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/local.ini:ro
+    networks:
+      - job-forge-network
+    healthcheck:
+      test: [ "CMD", "cgi-fcgi", "-bind", "-connect", "localhost:9000" ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  # Веб-сервер Apache
+  httpd-job-forge:
+    image: httpd:2.4-alpine
+    container_name: httpd-job-forge
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/job-forge
+      - ./docker/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+    networks:
+      - job-forge-network
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    depends_on:
+      php-job-forge:
+        condition: service_healthy
+
+  # База данных MySQL
+  mysql-job-forge:
+    image: mysql:8.4
+    container_name: mysql-job-forge
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - job-forge-network
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$$MYSQL_ROOT_PASSWORD" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+    # phpMyAdmin
+  phpmyadmin-job-forge:
+    image: phpmyadmin
+    container_name: phpmyadmin-job-forge
+    restart: unless-stopped
+    environment:
+      PMA_HOST: ${PMA_HOST}
+    ports:
+      - "8080:80"
+    depends_on:
+      mysql-job-forge:
+        condition: service_healthy
+    networks:
+      - job-forge-network
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "-O", "-", "http://localhost/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  mysql-data:
+
+networks:
+  job-forge-network:
+    driver: bridge
