@@ -50,3 +50,26 @@ function loadPartials(string $name): void
         echo "Partial view $name not found.";
     }
 }
+
+/**
+ * Outputs a human-readable representation of the given value.
+ *
+ * @param mixed $value The value to be inspected and printed.
+ * @return void
+ */
+function inspect(mixed $value): void
+{
+    echo '<pre>' . var_dump($value) . '</pre>';
+}
+
+/**
+ * Outputs a human-readable representation of the given value and exits the script.
+ *
+ * @param mixed $value The value to be inspected and printed.
+ * @return never
+ */
+function inspectAndExit(mixed $value): never
+{
+    echo '<pre>' . var_dump($value) . '</pre>';
+    exit(1);
+}
