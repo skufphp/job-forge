@@ -16,7 +16,7 @@ class Router
      * @param string $controller The controller to handle the request.
      * @return void
      */
-    public function registerRoute($method, $uri, $controller)
+    public function registerRoute(string $method, string $uri, string $controller): void
     {
         $this->routes[] = [
             'method' => $method,
@@ -90,6 +90,7 @@ class Router
      * Route the request to the appropriate controller.
      *
      * @param string $uri The URI of the request.
+     * @param string $method The HTTP method of the request.
      * @return void
      */
     public function route(string $uri, string $method): void
