@@ -5,4 +5,4 @@ declare(strict_types=1);
 $router->get('/', 'controllers/home.php');
 $router->get('/listings', 'controllers/listings/index.php');
 $router->get('/listings/create', 'controllers/listings/create.php');
-$router->get('404', 'controllers/error/404.php');
+$router->get('/listing', 'controllers/listings/show.php');
