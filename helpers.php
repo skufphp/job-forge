@@ -3,14 +3,14 @@
 declare(strict_types=1);
 
 /**
- * Helper functions for the application
+ * Вспомогательные функции для приложения
  */
 
 /**
- * Constructs the base directory path by appending the specified relative path.
+ * Строит путь к базовому каталогу, добавляя указанный относительный путь.
  *
- * @param string $path The relative path to be appended to the base directory. Defaults to an empty string.
- * @return string The absolute path resulting from combining the base directory with the provided relative path.
+ * @param string $path Относительный путь для добавления к базовому каталогу. По умолчанию пустая строка.
+ * @return string Абсолютный путь, полученный путем объединения базового каталога с предоставленным относительным путем.
  */
 function basePath(string $path = ''): string
 {
@@ -18,26 +18,27 @@ function basePath(string $path = ''): string
 }
 
 /**
- * Load a view file by name.
+ * Загружает файл представления по имени.
  *
- * @param string $name The name of the view to load.
+ * @param string $name Имя представления для загрузки.
  * @return void
  */
-function loadView(string $name): void
+function loadView(string $name, array $data = []): void
 {
     $viewPath = basePath("views/$name.view.php");
 
     if (file_exists($viewPath)) {
+        extract($data);
         require $viewPath;
     } else {
-        echo "View $name not found.";
+        echo "Представление $name не найдено.";
     }
 }
 
 /**
- * Load a partial view file by name.
+ * Загружает файл частичного представления по имени.
  *
- * @param string $name The name of the partial view to load.
+ * @param string $name Имя частичного представления для загрузки.
  * @return void
  */
 function loadPartials(string $name): void
@@ -47,14 +48,14 @@ function loadPartials(string $name): void
     if (file_exists($partialPath)) {
         require $partialPath;
     } else {
-        echo "Partial view $name not found.";
+        echo "Частичное представление $name не найдено.";
     }
 }
 
 /**
- * Outputs a human-readable representation of the given value.
+ * Выводит человекочитаемое представление данного значения.
  *
- * @param mixed $value The value to be inspected and printed.
+ * @param mixed $value Значение для проверки и вывода.
  * @return void
  */
 function inspect(mixed $value): void
@@ -63,13 +64,24 @@ function inspect(mixed $value): void
 }
 
 /**
- * Outputs a human-readable representation of the given value and exits the script.
+ * Выводит человекочитаемое представление данного значения и завершает выполнение скрипта.
  *
- * @param mixed $value The value to be inspected and printed.
+ * @param mixed $value Значение для проверки и вывода.
  * @return never
  */
 function inspectAndExit(mixed $value): never
 {
     echo '<pre>' . var_dump($value) . '</pre>';
     exit(1);
+}
+
+/**
+ * Форматирует зарплату в денежный формат с символом доллара.
+ *
+ * @param mixed $salary Значение зарплаты для форматирования.
+ * @return string Отформатированная строка с символом доллара и числовым значением зарплаты с разделителями тысяч.
+ */
+function formatSalary($salary)
+{
+    return '$' . number_format((int)$salary);
 }
