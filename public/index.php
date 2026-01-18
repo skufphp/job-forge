@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 require '../helpers.php';
-require basePath('Router.php');
-require basePath('Database.php');
+require basePath('Framework/Router.php');
+require basePath('Framework/Database.php');
 
 // Создание экземпляра маршрутизатора для обработки HTTP-запросов
 $router = new Router();
