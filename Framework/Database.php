@@ -34,7 +34,6 @@ class Database
         ];
 
         $this->connection = new PDO($dsn, $config['user'], $config['password'], $options);
-        echo "Подключение к базе данных успешно установлено";
     }
 
     /**
