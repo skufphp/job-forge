@@ -3,17 +3,21 @@
 declare(strict_types=1);
 
 /**
- * Router class for handling routes.
+ * Класс Router для обработки маршрутов.
  */
 class Router
 {
+    /**
+     * Массив для хранения зарегистрированных маршрутов.
+     * @var array
+     */
     protected $routes = [];
 
     /**
-     * Registers a route with the specified method, URI, and controller.
-     * @param string $method The HTTP method for the route (e.g., GET, POST).
-     * @param string $uri The URI associated with the route.
-     * @param string $controller The controller to handle the request.
+     * Регистрирует маршрут с указанным методом, URI и контроллером.
+     * @param string $method HTTP-метод для маршрута (например, GET, POST).
+     * @param string $uri URI, связанный с маршрутом.
+     * @param string $controller Контроллер для обработки запроса.
      * @return void
      */
     public function registerRoute(string $method, string $uri, string $controller): void
@@ -26,10 +30,10 @@ class Router
     }
 
     /**
-     * Registers a GET route with the specified URI and controller.
+     * Регистрирует GET-маршрут с указанным URI и контроллером.
      *
-     * @param string $uri The URI for which the route is being registered.
-     * @param string $controller The controller that will handle the request for the specified URI.
+     * @param string $uri URI для которого регистрируется маршрут.
+     * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
      * @return void
      */
     public function get(string $uri, string $controller): void
@@ -38,10 +42,10 @@ class Router
     }
 
     /**
-     * Registers a POST route with the specified URI and controller.
+     * Регистрирует POST-маршрут с указанным URI и контроллером.
      *
-     * @param string $uri The URI for which the route is being registered.
-     * @param string $controller The controller that will handle the request for the specified URI.
+     * @param string $uri URI для которого регистрируется маршрут.
+     * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
      * @return void
      */
     public function post(string $uri, string $controller): void
@@ -50,10 +54,10 @@ class Router
     }
 
     /**
-     * Registers a PUT route with the specified URI and controller.
+     * Регистрирует PUT-маршрут с указанным URI и контроллером.
      *
-     * @param string $uri The URI for which the route is being registered.
-     * @param string $controller The controller that will handle the request for the specified URI.
+     * @param string $uri URI для которого регистрируется маршрут.
+     * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
      * @return void
      */
     public function put(string $uri, string $controller): void
@@ -62,10 +66,10 @@ class Router
     }
 
     /**
-     * Registers a DELETE route with the specified URI and controller.
+     * Регистрирует DELETE-маршрут с указанным URI и контроллером.
      *
-     * @param string $uri The URI for which the route is being registered.
-     * @param string $controller The controller that will handle the request for the specified URI.
+     * @param string $uri URI для которого регистрируется маршрут.
+     * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
      * @return void
      */
     public function delete(string $uri, string $controller): void
@@ -74,12 +78,12 @@ class Router
     }
 
     /**
-     * Handle HTTP errors by setting the response code and loading the corresponding error view.
+     * Обрабатывает HTTP-ошибки, устанавливая код ответа и загружая соответствующее представление ошибки.
      *
-     * @param int $httpCode The HTTP status code to send in the response. Defaults to 404.
+     * @param int $httpCode HTTP-код статуса для отправки в ответе. По умолчанию 404.
      * @return void
      */
-    public function error($httpCode = 404): void
+    public function error(int $httpCode = 404): void
     {
         http_response_code($httpCode);
         loadView("error/{$httpCode}");
@@ -87,10 +91,10 @@ class Router
     }
 
     /**
-     * Route the request to the appropriate controller.
+     * Маршрутизирует запрос к соответствующему контроллеру.
      *
-     * @param string $uri The URI of the request.
-     * @param string $method The HTTP method of the request.
+     * @param string $uri URI запроса.
+     * @param string $method HTTP-метод запроса.
      * @return void
      */
     public function route(string $uri, string $method): void

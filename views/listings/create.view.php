@@ -4,13 +4,13 @@ loadPartials('navbar');
 loadPartials('top-banner');
 ?>
 
-<!-- Post a Job Form Box -->
+<!-- Форма публикации вакансии -->
 <section class="flex justify-center items-center mt-20">
     <div class="bg-white p-8 rounded-lg shadow-md w-full md:w-600 mx-6">
         <h2 class="text-4xl text-center font-bold mb-4">Create Job Listing</h2>
-        <!-- <div class="message bg-red-100 p-3 my-3">This is an error message.</div>
+        <!-- <div class="message bg-red-100 p-3 my-3">Это сообщение об ошибке.</div>
         <div class="message bg-green-100 p-3 my-3">
-          This is a success message.
+          Это сообщение об успехе.
         </div> -->
         <form method="POST">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
