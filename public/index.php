@@ -13,7 +13,7 @@ $router = new Router();
 $routes = require basePath('routes.php');
 
 // Получение текущего URI и HTTP-метода запроса из суперглобального массива $_SERVER
-$uri = $_SERVER['REQUEST_URI'];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
 
 // Маршрутизация запроса - поиск и выполнение контроллера соответствующего URI и HTTP-методу

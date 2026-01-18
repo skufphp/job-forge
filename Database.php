@@ -43,9 +43,15 @@ class Database
      * @param string $query SQL-запрос для выполнения.
      * @return PDOStatement Подготовленное выражение после выполнения запроса.
      */
-    public function query(string $query): PDOStatement
+    public function query(string $query, array $params = []): PDOStatement
     {
         $stmt = $this->connection->prepare($query);
+
+        // Bind parameters (if any)
+        foreach ($params as $param => $value) {
+            $stmt->bindValue(':' . $param, $value);
+        }
+
         $stmt->execute();
         return $stmt;
     }
