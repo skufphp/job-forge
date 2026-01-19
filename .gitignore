@@ -62,3 +62,6 @@ dist/
 
 # Database
 /config/db.php
+
+#lessons
+.lessons/

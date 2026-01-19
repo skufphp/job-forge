@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+namespace Framework;
+
 /**
  * Класс Router для обработки маршрутов.
  */
@@ -17,15 +19,18 @@ class Router
      * Регистрирует маршрут с указанным методом, URI и контроллером.
      * @param string $method HTTP-метод для маршрута (например, GET, POST).
      * @param string $uri URI, связанный с маршрутом.
-     * @param string $controller Контроллер для обработки запроса.
+     * @param string $action Строка в формате 'контроллер@метод' для обработки запроса.
      * @return void
      */
-    public function registerRoute(string $method, string $uri, string $controller): void
+    public function registerRoute(string $method, string $uri, string $action): void
     {
+        list($controller, $controllerMethod) = explode('@', $action);
+
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
             'controller' => $controller,
+            'controllerMethod' => $controllerMethod,
         ];
     }
 
@@ -100,8 +105,16 @@ class Router
     public function route(string $uri, string $method): void
     {
         foreach ($this->routes as $route) {
+
             if ($route['method'] === $method && $route['uri'] === $uri) {
-                require basePath('App/' . $route['controller']);
+
+                // Extract controller and controller method from route action string
+                $controller = 'App\\Controllers\\' . $route['controller'];
+                $controllerMethod = $route['controllerMethod'];
+
+                // Instantiate controller and call controller method
+                $controllerInstance = new $controller();
+                $controllerInstance->$controllerMethod();
                 return;
             }
         }
