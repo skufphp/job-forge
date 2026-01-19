@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+namespace App\controllers;
+
+use Framework\Database;
+
 $config = require basePath('config/db.php');
 $db = new Database($config);
 
