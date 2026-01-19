@@ -1,0 +1,17 @@
+{
+  "name": "skufphp/job-forge",
+  "description": "A job listing application",
+  "type": "project",
+  "authors": [
+    {
+      "name": "skufphp",
+      "email": "skufphp@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Framework\\": "Framework/",
+      "App\\": "App/"
+    }
+  }
+}

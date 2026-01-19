@@ -2,8 +2,8 @@ services:
   # PHP-FPM
   php-job-forge:
     build:
-      context: ./docker
-      dockerfile: php.Dockerfile
+      context: .
+      dockerfile: docker/php.Dockerfile
     container_name: php-job-forge
     restart: unless-stopped
     volumes:

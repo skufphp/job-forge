@@ -36,6 +36,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/job-forge
 RUN chown -R www-data:www-data /var/www/job-forge
 
+# Копируем composer файлы отдельно (для кеша)
+COPY composer.json composer.lock ./
+
 # Экспонируем порт
 EXPOSE 9000
 
