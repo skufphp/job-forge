@@ -21,6 +21,7 @@ function basePath(string $path = ''): string
  * Загружает файл представления по имени.
  *
  * @param string $name Имя представления для загрузки.
+ * @param array $data Данные для передачи в представление.
  * @return void
  */
 function loadView(string $name, array $data = []): void
