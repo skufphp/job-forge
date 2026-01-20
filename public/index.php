@@ -21,7 +21,7 @@ require '../helpers.php';
 $router = new Router();
 
 // Получение и загрузка маршрутов из файла routes.php
-$routes = require basePath('routes.php');
+require basePath('routes.php');
 
 // Получение текущего URI и HTTP-метода запроса из суперглобального массива $_SERVER
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

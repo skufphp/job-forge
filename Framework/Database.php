@@ -46,13 +46,14 @@ class Database
      * Выполняет запрос к базе данных и возвращает подготовленное выражение после выполнения.
      *
      * @param string $query SQL-запрос для выполнения.
+     * @param array $params Ассоциативный массив параметров для привязки к запросу.
      * @return PDOStatement Подготовленное выражение после выполнения запроса.
      */
     public function query(string $query, array $params = []): PDOStatement
     {
         $stmt = $this->connection->prepare($query);
 
-        // Bind parameters (if any)
+        // Привязка параметров (если есть)
         foreach ($params as $param => $value) {
             $stmt->bindValue(':' . $param, $value);
         }

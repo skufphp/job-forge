@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Framework;
 
+use App\Controllers\ErrorController;
+
 /**
  * Класс Router для обработки маршрутов.
  */
@@ -83,19 +85,6 @@ class Router
     }
 
     /**
-     * Обрабатывает HTTP-ошибки, устанавливая код ответа и загружая соответствующее представление ошибки.
-     *
-     * @param int $httpCode HTTP-код статуса для отправки в ответе. По умолчанию 404.
-     * @return void
-     */
-    public function error(int $httpCode = 404): void
-    {
-        http_response_code($httpCode);
-        loadView("error/{$httpCode}");
-        exit;
-    }
-
-    /**
      * Маршрутизирует запрос к соответствующему контроллеру.
      *
      * @param string $uri URI запроса.
@@ -106,18 +95,20 @@ class Router
     {
         foreach ($this->routes as $route) {
 
-            if ($route['method'] === $method && $route['uri'] === $uri) {
+            if ($route['uri'] === $uri && $route['method'] === $method) {
 
-                // Extract controller and controller method from route action string
+                // Формируем полное имя класса с namespace
                 $controller = 'App\\Controllers\\' . $route['controller'];
                 $controllerMethod = $route['controllerMethod'];
 
-                // Instantiate controller and call controller method
+                // Создаём экземпляр контроллера
                 $controllerInstance = new $controller();
+
+                // Вызываем метод контроллера
                 $controllerInstance->$controllerMethod();
                 return;
             }
         }
-        $this->error();
+        ErrorController::notFound();
     }
 }
