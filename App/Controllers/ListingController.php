@@ -80,6 +80,24 @@ class ListingController
         loadView('listings/show', [
             'listing' => $listing
         ]);
+    }
 
+    /**
+     * Сохраняет данные объявления в базу данных.
+     *
+     * @return void
+     */
+    public function store(): void
+    {
+        $allowedFields = [
+            'title', 'description', 'salary', 'requirements', 'benefits',
+            'company', 'address', 'city', 'state', 'phone', 'email'
+        ];
+
+        $newListingData = array_intersect_key($_POST, array_flip($allowedFields));
+
+        $newListingData['user_id'] = 1;
+
+        $newListingData = array_map('sanitize', $newListingData);
     }
 }
