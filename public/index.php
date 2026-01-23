@@ -8,7 +8,6 @@ use Framework\Database;
 
 require '../helpers.php';
 
-// Автозагрузка классов (устарело, сейчас используется composer)
 //spl_autoload_register(function ($className) {
 //
 //    $path = basePath('Framework/' . $className . '.php');

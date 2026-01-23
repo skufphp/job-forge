@@ -112,12 +112,12 @@ class Router
                 $match = true;
 
                 for ($i = 0; $i < count($uriSegments); $i++) {
-                    // Если URI не совпадает и в маршруте нет параметра, то маршрут не подходит
+                    // Если URI не совпадает и в маршруте нет параметра, значит маршрут не подходит
                     if ($routeSegments[$i] !== $uriSegments[$i] && !preg_match('/\{(.+?)\}/', $routeSegments[$i])) {
                         $match = false;
                         break;
                     }
-                    // Проверяем наличие параметра и добавляем в массив $params
+                    // Проверяем наличие параметра и добавляем его в массив $params
                     if (preg_match('/\{(.+?)\}/', $routeSegments[$i], $matches)) {
                         $params[$matches[1]] = $uriSegments[$i];
 
