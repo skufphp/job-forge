@@ -86,3 +86,14 @@ function formatSalary($salary)
 {
     return '$' . number_format((int)$salary);
 }
+
+/**
+ * Очищает данные от потенциально опасных символов.
+ *
+ * @param string $dirty Исходная строка для очистки.
+ * @return string Очищенная строка, безопасная для вывода в HTML.
+ */
+function sanitize(string $dirty): string
+{
+    return htmlspecialchars(trim($dirty), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+}

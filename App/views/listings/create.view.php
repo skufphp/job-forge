@@ -12,7 +12,7 @@ loadPartials('top-banner');
         <div class="message bg-green-100 p-3 my-3">
           Это сообщение об успехе.
         </div> -->
-        <form method="POST">
+        <form method="POST" action="/listings">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-500">
                 Job Info
             </h2>
