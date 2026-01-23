@@ -10,6 +10,7 @@ loadPartials('top-banner');
             <p class="text-center text-2xl mb-4">
                 <?= $message ?>
             </p>
+            <a class="block  text-center text-blue-500 hover:underline" href="/listings">Вернуться к объявлениям</a>
         </div>
     </section>
 

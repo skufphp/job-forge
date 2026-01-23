@@ -88,27 +88,56 @@ class Router
      * Маршрутизирует запрос к соответствующему контроллеру.
      *
      * @param string $uri URI запроса.
-     * @param string $method HTTP-метод запроса.
      * @return void
      */
-    public function route(string $uri, string $method): void
+    public function route(string $uri): void
     {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+
         foreach ($this->routes as $route) {
 
-            if ($route['uri'] === $uri && $route['method'] === $method) {
+            // Разделяем текущий URI на сегменты
+            $uriSegments = explode('/', trim($uri, '/'));
 
-                // Формируем полное имя класса с namespace
-                $controller = 'App\\Controllers\\' . $route['controller'];
-                $controllerMethod = $route['controllerMethod'];
+            // Разделяем URI маршрута на сегменты
+            $routeSegments = explode('/', trim($route['uri'], '/'));
 
-                // Создаём экземпляр контроллера
-                $controllerInstance = new $controller();
+            $match = true;
 
-                // Вызываем метод контроллера
-                $controllerInstance->$controllerMethod();
-                return;
+            // Проверяем, совпадает ли количество сегментов текущего URI с количеством сегментов URI маршрута
+            if (count($uriSegments) === count($routeSegments) && strtoupper($route['method']) === strtoupper($requestMethod)) {
+
+                $params = [];
+
+                $match = true;
+
+                for ($i = 0; $i < count($uriSegments); $i++) {
+                    // Если URI не совпадает и в маршруте нет параметра, то маршрут не подходит
+                    if ($routeSegments[$i] !== $uriSegments[$i] && !preg_match('/\{(.+?)\}/', $routeSegments[$i])) {
+                        $match = false;
+                        break;
+                    }
+                    // Проверяем наличие параметра и добавляем в массив $params
+                    if (preg_match('/\{(.+?)\}/', $routeSegments[$i], $matches)) {
+                        $params[$matches[1]] = $uriSegments[$i];
+
+                    }
+                }
+                if ($match) {
+                    // Формируем полное имя класса контроллера с namespace
+                    $controller = 'App\\Controllers\\' . $route['controller'];
+                    $controllerMethod = $route['controllerMethod'];
+
+                    // Создаём экземпляр контроллера
+                    $controllerInstance = new $controller();
+
+                    // Вызываем метод контроллера
+                    $controllerInstance->$controllerMethod($params);
+                    return;
+                }
             }
         }
+
         ErrorController::notFound();
     }
 }
