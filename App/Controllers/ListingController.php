@@ -57,16 +57,26 @@ class ListingController
      *
      * @return void
      */
-    public function show(): void
+    public function show(array $params): void
     {
-        $id = $_GET['id'] ?? '';
+        // Извлекаем ID из параметров
+        $id = $params['id'] ?? '';
 
+        // Подготавливаем параметры для запроса
         $params = [
             'id' => $id
         ];
 
+        // Выполняем запрос к БД
         $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $params)->fetch();
 
+        // Проверяем, найдена ли запись
+        if (!$listing) {
+            ErrorController::notFound('Объявление не найдено.');
+            return;
+        }
+
+        // Загружаем представление с данными
         loadView('listings/show', [
             'listing' => $listing
         ]);
