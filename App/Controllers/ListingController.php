@@ -72,7 +72,7 @@ class ListingController
 
         // Проверяем, найдена ли запись
         if (!$listing) {
-            ErrorController::notFound('Объявление не найдено.');
+            ErrorController::notFound('Listing not found.');
             return;
         }
 
