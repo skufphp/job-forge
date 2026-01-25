@@ -97,3 +97,15 @@ function sanitize(string $dirty): string
 {
     return htmlspecialchars(trim($dirty), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
+
+/**
+ * Перенаправляет пользователя на указанный URL.
+ *
+ * @param string $url URL-адрес для перенаправления.
+ * @return void
+ */
+function redirect(string $url): void
+{
+    header("Location: $url");
+    exit;
+}
