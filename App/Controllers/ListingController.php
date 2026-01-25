@@ -86,13 +86,18 @@ class ListingController
     /**
      * Сохраняет данные объявления в базу данных.
      *
+     * Метод получает данные из POST-запроса, фильтрует их по разрешенным полям,
+     * выполняет валидацию обязательных полей и сохраняет объявление в базу данных.
+     * При наличии ошибок валидации перезагружает форму создания с сообщениями об ошибках.
+     * После успешного сохранения перенаправляет пользователя на страницу списка объявлений.
+     *
      * @return void
      */
     public function store(): void
     {
         $allowedFields = [
             'title', 'description', 'salary', 'requirements', 'benefits',
-            'company', 'address', 'city', 'state', 'phone', 'email'
+            'company', 'address', 'city', 'state', 'phone', 'email', 'tags'
         ];
 
         $newListingData = array_intersect_key($_POST, array_flip($allowedFields));
@@ -101,7 +106,7 @@ class ListingController
 
         $newListingData = array_map('sanitize', $newListingData);
 
-        $requiredFields = ['title', 'description', 'email', 'city', 'state'];
+        $requiredFields = ['title', 'description', 'salary', 'email', 'city', 'state'];
 
         $errors = [];
 
@@ -119,7 +124,30 @@ class ListingController
                 'listing' => $newListingData
             ]);
         } else {
-            echo "Success";
+
+            $fields = [];
+
+            foreach ($newListingData as $field => $value) {
+                $fields[] = $field;
+            }
+            $fields = implode(', ', $fields);
+
+            $values = [];
+
+            foreach ($newListingData as $field => $value) {
+                // 1. Заменяет пустые строки на null
+                if ($value === '') {
+                    $newListingData[$field] = null;
+                }
+                // 2. Создает параметры для prepared statement
+                $values[] = ':' . $field;
+            }
+            $values = implode(', ', $values);
+
+            $query = "INSERT INTO listings ({$fields}) VALUES ({$values})";
+            $this->db->query($query, $newListingData);
+
+            redirect('/listings');
         }
     }
 }
