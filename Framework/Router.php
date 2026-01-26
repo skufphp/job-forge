@@ -94,9 +94,9 @@ class Router
     {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-        // Check for _method input
+        // Проверяем наличие _method в POST-данных
         if ($requestMethod === 'POST' && isset($_POST['_method'])) {
-            // Override the request method with the one specified in the _method input
+            // Переопределяем метод запроса
             $requestMethod = strtoupper($_POST['_method']);
         }
 
