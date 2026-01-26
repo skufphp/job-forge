@@ -2,20 +2,13 @@
 
 declare(strict_types=1);
 
+session_start();
+
 require __DIR__ . '/../vendor/autoload.php';
 use Framework\Router;
 use Framework\Database;
 
 require '../helpers.php';
-
-//spl_autoload_register(function ($className) {
-//
-//    $path = basePath('Framework/' . $className . '.php');
-//
-//    if (file_exists($path)) {
-//        require $path;
-//    }
-//});
 
 // Создание экземпляра маршрутизатора для обработки HTTP-запросов
 $router = new Router();

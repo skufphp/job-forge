@@ -172,19 +172,21 @@ class ListingController
      */
     public function destroy(array $params): void
     {
-        $id = $params['id'] ?? '';
-
-        $params = [
-            'id' => $id
-        ];
-
+        // 1. Проверяем, существует ли объявление
         $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $params)->fetch();
 
+        // 2. Если не существует — показываем 404
         if (!$listing) {
             ErrorController::notFound('Listing not found.');
         }
 
+        // 3. Удаляем объявление
         $this->db->query("DELETE FROM listings WHERE id = :id", $params);
+
+        // 4. Установка flash message
+        $_SESSION['success_message'] = 'Listing deleted successfully.';
+
+        // 5. Перенаправляем на список объявлений
         redirect('/listings');
     }
 }
