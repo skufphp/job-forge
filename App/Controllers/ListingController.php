@@ -72,16 +72,16 @@ class ListingController
         $id = $params['id'] ?? '';
 
         // Подготавливаем параметры для запроса
-        $params = [
+        $queryParams = [
             'id' => $id
         ];
 
         // Выполняем запрос к БД
-        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $params)->fetch();
+        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
 
         // Проверяем, найдена ли запись
         if (!$listing) {
-            ErrorController::notFound('Listing not found.');
+            ErrorController::notFound('Объявление не найдено.');
             return;
         }
 
@@ -121,12 +121,12 @@ class ListingController
         foreach ($requiredFields as $field) {
 
             if (empty($newListingData[$field]) || !Validation::string($newListingData[$field])) {
-                $errors[$field] = ucfirst($field) . ' is required.';
+                $errors[$field] = 'Поле ' . ucfirst($field) . ' обязательно для заполнения.';
             }
         }
 
         if (!empty($errors)) {
-            // Reload view with errors
+            // Перезагрузка представления с ошибками
             loadView('listings/create', [
                 'errors' => $errors,
                 'listing' => $newListingData
@@ -143,11 +143,11 @@ class ListingController
             $values = [];
 
             foreach ($newListingData as $field => $value) {
-                // 1. Заменяет пустые строки на null
+                // Заменяет пустые строки на null
                 if ($value === '') {
                     $newListingData[$field] = null;
                 }
-                // 2. Создает параметры для prepared statement
+                // Создает параметры для prepared statement
                 $values[] = ':' . $field;
             }
             $values = implode(', ', $values);
@@ -172,21 +172,64 @@ class ListingController
      */
     public function destroy(array $params): void
     {
-        // 1. Проверяем, существует ли объявление
-        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $params)->fetch();
+        // Извлекаем ID из параметров
+        $id = $params['id'] ?? '';
 
-        // 2. Если не существует — показываем 404
+        // Подготавливаем параметры для запроса
+        $queryParams = [
+            'id' => $id
+        ];
+
+        // Проверяем, существует ли объявление
+        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
+
+        // Если не существует — показываем 404
         if (!$listing) {
-            ErrorController::notFound('Listing not found.');
+            ErrorController::notFound('Объявление не найдено.');
         }
 
-        // 3. Удаляем объявление
-        $this->db->query("DELETE FROM listings WHERE id = :id", $params);
+        // Удаляем объявление
+        $this->db->query("DELETE FROM listings WHERE id = :id", $queryParams);
 
-        // 4. Установка flash message
-        $_SESSION['success_message'] = 'Listing deleted successfully.';
+        // Установка flash-сообщения
+        $_SESSION['success_message'] = 'Объявление успешно удалено.';
 
-        // 5. Перенаправляем на список объявлений
+        // Перенаправляем на список объявлений
         redirect('/listings');
+    }
+
+    /**
+     * Отображает форму редактирования объявления.
+     *
+     * Метод извлекает ID объявления из параметров маршрута, выполняет запрос к базе данных
+     * для получения информации об объявлении. Если объявление не найдено, вызывается
+     * страница ошибки 404. При успешном нахождении загружается представление формы редактирования с данными объявления.
+     *
+     * @param array $params Массив параметров маршрута, содержащий 'id' объявления
+     * @return void
+     */
+    public function edit(array $params): void
+    {
+        // Извлекаем ID из параметров
+        $id = $params['id'] ?? '';
+
+        // Подготавливаем параметры для запроса
+        $queryParams = [
+            'id' => $id
+        ];
+
+        // Выполняем запрос к БД
+        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
+
+        // Проверяем, найдена ли запись
+        if (!$listing) {
+            ErrorController::notFound('Объявление не найдено.');
+            return;
+        }
+
+        // Загружаем представление с данными
+        loadView('listings/edit', [
+            'listing' => $listing
+        ]);
     }
 }
