@@ -42,11 +42,12 @@ function loadView(string $name, array $data = []): void
  * @param string $name Имя частичного представления для загрузки.
  * @return void
  */
-function loadPartials(string $name): void
+function loadPartials(string $name, $data = []): void
 {
     $partialPath = basePath("App/views/partials/$name.php");
 
     if (file_exists($partialPath)) {
+        extract($data);
         require $partialPath;
     } else {
         echo "Partial $name not found.";
