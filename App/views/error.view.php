@@ -1,8 +1,7 @@
-<?php
-loadPartials('head');
-loadPartials('navbar');
-loadPartials('top-banner');
-?>
+<?php loadPartials('head') ?>
+<?php loadPartials('navbar') ?>
+<?php loadPartials('top-banner') ?>
+
 
     <section>
         <div class="container mx-auto p-4 mt-4">
@@ -14,4 +13,4 @@ loadPartials('top-banner');
         </div>
     </section>
 
-<?php loadPartials('footer'); ?>
+<?php loadPartials('footer') ?>

@@ -1,9 +1,7 @@
-<?php
-loadPartials('head');
-loadPartials('navbar');
-loadPartials('showcase-search');
-loadPartials('top-banner');
-?>
+<?php loadPartials('head') ?>
+<?php loadPartials('navbar') ?>
+<?php loadPartials('showcase-search') ?>
+<?php loadPartials('top-banner') ?>
 
 <!-- Список вакансий -->
 <section>
@@ -48,7 +46,5 @@ loadPartials('top-banner');
         </a>
 </section>
 
-<?php
-loadPartials('bottom-banner');
-loadPartials('footer');
-?>
+<?php loadPartials('bottom-banner') ?>
+<?php loadPartials('footer') ?>
