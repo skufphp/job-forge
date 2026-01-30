@@ -277,12 +277,14 @@ class ListingController
 
         $errors = [];
 
+        // Проверяем каждое обязательное поле на наличие значения
         foreach ($requiredFields as $field) {
-            if (empty($updateValues[$field]) && !Validation::string($updateValues[$field])) {
+            if (empty($updateValues[$field]) || !Validation::string($updateValues[$field])) {
                 $errors[$field] = ucfirst($field) . ' is required.';
             }
         }
 
+        // Если обнаружены ошибки валидации, перезагружаем форму редактирования с ошибками
         if (!empty($errors)) {
             loadView('listings/edit', [
                 'errors' => $errors,
@@ -290,7 +292,7 @@ class ListingController
             ]);
             exit;
         } else {
-            // Submit the updated listing data to the database
+            // Отправляем обновленные данные объявления в базу данных
             $updateFields = [];
 
             foreach (array_keys($updateValues) as $field) {
