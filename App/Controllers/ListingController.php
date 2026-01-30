@@ -81,7 +81,7 @@ class ListingController
 
         // Проверяем, найдена ли запись
         if (!$listing) {
-            ErrorController::notFound('Объявление не найдено.');
+            ErrorController::notFound('Listing not found.');
             return;
         }
 
@@ -121,7 +121,7 @@ class ListingController
         foreach ($requiredFields as $field) {
 
             if (empty($newListingData[$field]) || !Validation::string($newListingData[$field])) {
-                $errors[$field] = 'Поле ' . ucfirst($field) . ' обязательно для заполнения.';
+                $errors[$field] = ucfirst($field) . ' is required.';
             }
         }
 
@@ -185,14 +185,14 @@ class ListingController
 
         // Если не существует — показываем 404
         if (!$listing) {
-            ErrorController::notFound('Объявление не найдено.');
+            ErrorController::notFound('Listing not found.');
         }
 
         // Удаляем объявление
         $this->db->query("DELETE FROM listings WHERE id = :id", $queryParams);
 
         // Установка flash-сообщения
-        $_SESSION['success_message'] = 'Объявление успешно удалено.';
+        $_SESSION['success_message'] = 'Listing deleted successfully.';
 
         // Перенаправляем на список объявлений
         redirect('/listings');
@@ -223,7 +223,7 @@ class ListingController
 
         // Проверяем, найдена ли запись
         if (!$listing) {
-            ErrorController::notFound('Объявление не найдено.');
+            ErrorController::notFound('Listing not found.');
             return;
         }
 
@@ -234,9 +234,15 @@ class ListingController
     }
 
     /**
-     * Update a listing in the database.
+     * Обновляет данные объявления в базе данных.
      *
-     * @param array $params
+     * Метод извлекает ID объявления из параметров маршрута, проверяет существование объявления
+     * в базе данных. Получает данные из POST-запроса, фильтрует их по разрешенным полям,
+     * выполняет валидацию обязательных полей и сохраняет изменения в базу данных.
+     * При наличии ошибок валидации перезагружает форму редактирования с сообщениями об ошибках.
+     * После успешного обновления перенаправляет пользователя на страницу просмотра объявления.
+     *
+     * @param array $params Массив параметров маршрута, содержащий 'id' объявления
      * @return void
      */
     public function update($params)
@@ -254,7 +260,7 @@ class ListingController
 
         // Проверяем, найдена ли запись
         if (!$listing) {
-            ErrorController::notFound('Объявление не найдено.');
+            ErrorController::notFound('Listing not found.');
             return;
         }
 
@@ -271,12 +277,14 @@ class ListingController
 
         $errors = [];
 
+        // Проверяем каждое обязательное поле на наличие значения
         foreach ($requiredFields as $field) {
-            if (empty($updateValues[$field]) && !Validation::string($updateValues[$field])) {
-                $errors[$field] = 'Поле ' . ucfirst($field) . ' обязательно для заполнения.';
+            if (empty($updateValues[$field]) || !Validation::string($updateValues[$field])) {
+                $errors[$field] = ucfirst($field) . ' is required.';
             }
         }
 
+        // Если обнаружены ошибки валидации, перезагружаем форму редактирования с ошибками
         if (!empty($errors)) {
             loadView('listings/edit', [
                 'errors' => $errors,
@@ -284,7 +292,7 @@ class ListingController
             ]);
             exit;
         } else {
-            // Submit the updated listing data to the database
+            // Отправляем обновленные данные объявления в базу данных
             $updateFields = [];
 
             foreach (array_keys($updateValues) as $field) {
@@ -297,7 +305,7 @@ class ListingController
 
             $this->db->query($updateQuery, $updateValues);
 
-            $_SESSION['success_message'] = 'Объявление успешно обновлено.';
+            $_SESSION['success_message'] = 'Listing updated successfully.';
 
             redirect('/listings/' . $id);
         }

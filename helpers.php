@@ -32,7 +32,7 @@ function loadView(string $name, array $data = []): void
         extract($data);
         require $viewPath;
     } else {
-        echo "Представление $name не найдено.";
+        echo "View $name not found.";
     }
 }
 
@@ -49,7 +49,7 @@ function loadPartials(string $name): void
     if (file_exists($partialPath)) {
         require $partialPath;
     } else {
-        echo "Частичное представление $name не найдено.";
+        echo "Partial $name not found.";
     }
 }
 
