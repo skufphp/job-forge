@@ -30,7 +30,7 @@ class Validation
      * @param string $value Адрес электронной почты для проверки.
      * @return string|false Возвращает отфильтрованный адрес электронной почты, если он валиден, или false в противном случае.
      */
-    public static function email(string $value)
+    public static function email(string $value): string|false
     {
         $value = trim($value);
         return filter_var($value, FILTER_VALIDATE_EMAIL);
