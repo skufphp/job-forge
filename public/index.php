@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-session_start();
-
 require __DIR__ . '/../vendor/autoload.php';
+
 use Framework\Router;
-use Framework\Database;
+use Framework\Session;
+
+Session::start();
 
 require '../helpers.php';
 
