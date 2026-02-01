@@ -10,6 +10,10 @@ use Framework\Validation;
 
 /**
  * Контроллер для работы с пользователями.
+ *
+ * Обрабатывает регистрацию, аутентификацию и управление пользователями.
+ *
+ * @package App\Controllers
  */
 class UserController
 {
@@ -120,7 +124,7 @@ class UserController
              VALUES (:name, :email, :city, :state, :password)", $params
         );
 
-        // Get new user ID
+        // Получение ID нового пользователя
         $userID = $this->db->connection->lastInsertId();
 
         Session::set('user', [

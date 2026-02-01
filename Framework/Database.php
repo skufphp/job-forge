@@ -8,6 +8,14 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+/**
+ * Класс для работы с базой данных.
+ *
+ * Предоставляет функциональность для подключения к базе данных MySQL
+ * и выполнения SQL-запросов с использованием PDO.
+ *
+ * @package Framework
+ */
 class Database
 {
     /**
