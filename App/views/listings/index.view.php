@@ -1,8 +1,6 @@
-<?php
-loadPartials('head');
-loadPartials('navbar');
-loadPartials('top-banner');
-?>
+<?php loadPartials('head') ?>
+<?php loadPartials('navbar') ?>
+<?php loadPartials('top-banner') ?>
 
 <!-- Список вакансий -->
 <section>
@@ -46,7 +44,5 @@ loadPartials('top-banner');
         </div>
 </section>
 
-<?php
-loadPartials('bottom-banner');
-loadPartials('footer');
-?>
+<?php loadPartials('bottom-banner') ?>
+<?php loadPartials('footer') ?>
