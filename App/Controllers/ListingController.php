@@ -7,6 +7,14 @@ namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
 
+/**
+ * Контроллер для работы с объявлениями.
+ *
+ * Обеспечивает полный CRUD-функционал для управления объявлениями:
+ * просмотр списка, создание, редактирование, удаление и отображение деталей объявлений.
+ *
+ * @package App\Controllers
+ */
 class ListingController
 {
     /**

@@ -6,6 +6,16 @@ namespace App\Controllers;
 
 use Framework\Database;
 
+/**
+ * Контроллер для работы с домашней страницей и объявлениями.
+ *
+ * Этот класс отвечает за обработку запросов к главной странице приложения,
+ * извлечение объявлений из базы данных и отображение их пользователю.
+ *
+ * @package App\Controllers
+ * @author  Your Name
+ * @version 1.0.0
+ */
 class HomeController
 {
     /**
