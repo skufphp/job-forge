@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+/**
+ * Контроллер для обработки ошибок и исключений.
+ *
+ * Предоставляет статические методы для отображения страниц ошибок
+ * с соответствующими HTTP-кодами состояния.
+ *
+ * @package App\Controllers
+ */
 class ErrorController
 {
     /**

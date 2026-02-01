@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace Framework;
 
+/**
+ * Класс для управления сессиями
+ *
+ * Предоставляет статические методы для работы с PHP сессиями:
+ * запуск, установка, получение, проверка существования и очистка данных сессии.
+ *
+ * @package Framework
+ */
 class Session
 {
     /**
@@ -19,10 +27,10 @@ class Session
     }
 
     /**
-     * Set a session key/value pair.
+     * Установить пару ключ/значение в сессию
      *
-     * @param string $key The key to set.
-     * @param mixed $value The value to set.
+     * @param string $key Ключ для установки.
+     * @param mixed $value Значение для установки.
      * @return void
      */
     public static function set(string $key, mixed $value): void
@@ -31,11 +39,11 @@ class Session
     }
 
     /**
-     * Get a session value by key.
+     * Получить значение из сессии по ключу.
      *
-     * @param string $key The key to retrieve.
-     * @param mixed $default The default value to return if the key is not found.
-     * @return mixed|null The session value or null if not found.
+     * @param string $key Ключ для получения.
+     * @param mixed $default Значение по умолчанию, если ключ не найден.
+     * @return mixed|null Значение из сессии или значение по умолчанию, если не найдено.
      */
     public static function get(string $key, mixed $default = null): mixed
     {
@@ -43,10 +51,10 @@ class Session
     }
 
     /**
-     * Check if session key exists
+     * Проверить, существует ли ключ в сессии
      *
-     * @param string $key
-     * @return bool
+     * @param string $key Ключ для проверки.
+     * @return bool Возвращает true, если ключ существует в сессии, иначе false.
      */
     public static function has($key): bool
     {
@@ -54,20 +62,18 @@ class Session
     }
 
     /**
-     * Clear session by key
+     * Очистить данные сессии по ключу
      *
-     * @param string $key
+     * @param string $key Ключ для удаления из сессии.
      * @return void
      */
     public static function clear($key): void
     {
-        if (!isset($_SESSION[$key])) {
-            unset($_SESSION[$key]);
-        }
+        unset($_SESSION[$key]);
     }
 
     /**
-     * Clear all session data
+     * Очистить все данные сессии
      *
      * @return void
      */

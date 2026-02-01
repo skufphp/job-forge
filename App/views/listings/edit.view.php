@@ -1,8 +1,6 @@
-<?php
-loadPartials('head');
-loadPartials('navbar');
-loadPartials('top-banner');
-?>
+<?php loadPartials('head') ?>
+<?php loadPartials('navbar') ?>
+<?php loadPartials('top-banner') ?>
 
 <section class="flex justify-center items-center mt-20">
     <div class="bg-white p-8 rounded-lg shadow-md w-full md:w-600 mx-6">
@@ -14,7 +12,7 @@ loadPartials('top-banner');
                 Job Info
             </h2>
 
-            <?= loadPartials('errors', ['errors' => $errors ?? []]) ?>
+            <?php loadPartials('errors', ['errors' => $errors ?? []]) ?>
 
             <div class="mb-4">
                 <input
@@ -140,7 +138,5 @@ loadPartials('top-banner');
     </div>
 </section>
 
-<?php
-loadPartials('bottom-banner');
-loadPartials('footer');
-?>
+<?php loadPartials('bottom-banner') ?>
+<?php loadPartials('footer') ?>
