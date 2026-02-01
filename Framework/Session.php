@@ -69,9 +69,7 @@ class Session
      */
     public static function clear($key): void
     {
-        if (!isset($_SESSION[$key])) {
-            unset($_SESSION[$key]);
-        }
+        unset($_SESSION[$key]);
     }
 
     /**
