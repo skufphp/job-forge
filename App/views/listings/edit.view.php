@@ -14,7 +14,7 @@ loadPartials('top-banner');
                 Job Info
             </h2>
 
-            <?= loadPartials('errors', ['errors' => $errors ?? []]) ?>
+            <?php loadPartials('errors', ['errors' => $errors ?? []]) ?>
 
             <div class="mb-4">
                 <input

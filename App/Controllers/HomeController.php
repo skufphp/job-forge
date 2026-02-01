@@ -6,6 +6,9 @@ namespace App\Controllers;
 
 use Framework\Database;
 
+/**
+ * Контроллер для работы с домашней страницей и объявлением.
+ */
 class HomeController
 {
     /**

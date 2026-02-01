@@ -7,6 +7,9 @@ namespace App\Controllers;
 use Framework\Database;
 use Framework\Validation;
 
+/**
+ * Контроллер для работы с объявлениями.
+ */
 class ListingController
 {
     /**

@@ -8,6 +8,9 @@ use Framework\Session;
 use Framework\Database;
 use Framework\Validation;
 
+/**
+ * Контроллер для работы с пользователями.
+ */
 class UserController
 {
     protected $db;
@@ -19,7 +22,7 @@ class UserController
     }
 
     /**
-     * Show the login page
+     * Отображает страницу входа в систему
      *
      * @return void
      */
@@ -29,7 +32,7 @@ class UserController
     }
 
     /**
-     * Show the register page
+     * Отображает страницу регистрации
      *
      * @return void
      */
@@ -39,7 +42,9 @@ class UserController
     }
 
     /**
-     * Store a new user in the database
+     * Сохраняет нового пользователя в базе данных
+     *
+     * @return void
      */
     public function store(): void
     {
@@ -52,24 +57,28 @@ class UserController
 
         $errors = [];
 
-        // Валидация полей
+        // Проверка email
         if (!Validation::email($email)) {
             $errors['email'] = 'Please enter a valid email address';
         }
 
+        // Проверка имени (от 2 до 50 символов)
         if (!Validation::string($name, 2, 50)) {
             $errors['name'] = 'Name must be between 2 and 50 characters';
         }
 
+        // Проверка пароля (минимум 6 символов)
         if (!Validation::string($password, 8, 20)) {
             $errors['password'] = 'Password must be at least 8 characters';
         }
 
+        // Проверка совпадения паролей
         if (!Validation::match($password, $password_confirmation)) {
             $errors['password_confirmation'] = 'Passwords do not match';
         }
 
         if (!empty($errors)) {
+            // Есть ошибки — показываем форму снова с ошибками
             loadView('users/create', [
                 'errors' => $errors,
                 'user' => [
