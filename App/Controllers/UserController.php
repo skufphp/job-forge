@@ -36,6 +36,24 @@ class UserController
     }
 
     /**
+     * Выполняет выход из системы
+     *
+     * @return void
+     */
+    public function logout()
+    {
+        // Получаем реальное имя cookie сессии (не hardcode!)
+        $cookieName = session_name();  // Вернёт 'PHPSESSID' или кастомное имя
+
+        Session::clearAll();
+
+        $params = session_get_cookie_params();
+        setcookie($cookieName, '', time() - 86400, $params['path'], $params['domain']);
+
+        redirect('/');
+    }
+
+    /**
      * Отображает страницу регистрации
      *
      * @return void
