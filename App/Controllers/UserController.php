@@ -89,9 +89,9 @@ class UserController
             $errors['name'] = 'Name must be between 2 and 50 characters';
         }
 
-        // Проверка пароля (минимум 6 символов)
-        if (!Validation::string($password, 8, 20)) {
-            $errors['password'] = 'Password must be at least 8 characters';
+        // Проверка пароля (минимум 8 символов)
+        if (!Validation::string($password, 6, 15)) {
+            $errors['password'] = 'Password must be at least 6 characters';
         }
 
         // Проверка совпадения паролей
@@ -151,6 +151,67 @@ class UserController
             'email' => $email,
             'city' => $city,
             'state' => $state
+        ]);
+
+        redirect('/');
+    }
+
+    public function authenticate(): void
+    {
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
+
+        $errors = [];
+
+        // Проверка email
+        if (!Validation::email($email)) {
+            $errors['email'] = 'Please enter a valid email address';
+        }
+
+        // Проверка пароля (минимум 8 символов)
+        if (!Validation::string($password, 6, 15)) {
+            $errors['password'] = 'Password must be at least 6 characters';
+        }
+
+        if (!empty($errors)) {
+            // Есть ошибки — показываем форму снова с ошибками
+            loadView('users/login', [
+                'errors' => $errors
+            ]);
+            exit;
+        }
+
+        // Проверка существования email
+        $params = [
+            'email' => $email
+        ];
+
+        $user = $this->db->query("SELECT * FROM users WHERE email = :email", $params)->fetch();
+
+        if (!$user) {
+            $errors['email'] = 'Incorrect email or password';
+            loadView('users/login', [
+                'errors' => $errors,
+            ]);
+            exit;
+        }
+
+        // Проверка пароля
+        if (!password_verify($password, $user->password)) {
+            $errors['password'] = 'Incorrect email or password';
+            loadView('users/login', [
+                'errors' => $errors,
+            ]);
+            exit;
+        }
+
+        // Сохранение данных пользователя в сессию
+        Session::set('user', [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'city' => $user->city,
+            'state' => $user->state
         ]);
 
         redirect('/');
