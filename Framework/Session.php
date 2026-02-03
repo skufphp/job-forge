@@ -82,4 +82,30 @@ class Session
         session_unset();
         session_destroy();
     }
+
+    /**
+     * Установить flash-сообщение
+     *
+     * @param string $key Ключ для flash-сообщения.
+     * @param string $message Текст сообщения.
+     * @return void
+     */
+    public static function setFlashMessage(string $key, string $message): void
+    {
+        self::set('flash_' . $key, $message);
+    }
+
+    /**
+     * Get a flash message and unset it
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return string|null
+     */
+    public static function getFlashMessage(string $key, mixed $default = null): string|null
+    {
+        $message = self::get('flash_' . $key, $default);
+        self::clear('flash_' . $key);
+        return $message;
+    }
 }
