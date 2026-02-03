@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use Framework\Session;
 use Framework\Database;
 use Framework\Validation;
+use Framework\Authorization;
 
 /**
  * Контроллер для работы с объявлениями.
@@ -47,7 +49,12 @@ class ListingController
      */
     public function index(): void
     {
-        $listings = $this->db->query('SELECT * FROM listings')->fetchAll();
+        $listings = $this->db->query
+        (
+            'SELECT * FROM listings 
+             ORDER BY created_at 
+             DESC'
+        )->fetchAll();
 
         loadView('listings/index', [
             'listings' => $listings
@@ -118,7 +125,7 @@ class ListingController
 
         $newListingData = array_intersect_key($_POST, array_flip($allowedFields));
 
-        $newListingData['user_id'] = 1;
+        $newListingData['user_id'] = Session::get('user')['id'];
 
         $newListingData = array_map('sanitize', $newListingData);
 
@@ -194,6 +201,13 @@ class ListingController
         // Если не существует — показываем 404
         if (!$listing) {
             ErrorController::notFound('Listing not found.');
+        }
+
+        // Авторизация
+        if (!Authorization::isOwner($listing->user_id)) {
+            $_SESSION['error_message'] = 'You are not authorized to delete this listing.';
+            redirect('/listings/' . $listing->id);
+            return;
         }
 
         // Удаляем объявление
