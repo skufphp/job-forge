@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Framework;
 
+use Framework\Middleware\Authorize;
 use App\Controllers\ErrorController;
 
 /**
@@ -28,9 +29,15 @@ class Router
      * @param string $method HTTP-метод для маршрута (например, GET, POST).
      * @param string $uri URI, связанный с маршрутом.
      * @param string $action Строка в формате 'контроллер@метод' для обработки запроса.
+     * @param array $middleware Массив middleware, которые будут применены к маршруту.
      * @return void
      */
-    public function registerRoute(string $method, string $uri, string $action): void
+    public function registerRoute(
+        string $method,
+        string $uri,
+        string $action,
+        array  $middleware = []
+    ): void
     {
         list($controller, $controllerMethod) = explode('@', $action);
 
@@ -39,6 +46,7 @@ class Router
             'uri' => $uri,
             'controller' => $controller,
             'controllerMethod' => $controllerMethod,
+            'middleware' => $middleware
         ];
     }
 
@@ -47,11 +55,16 @@ class Router
      *
      * @param string $uri URI для которого регистрируется маршрут.
      * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
+     * @param array $middleware Массив middleware, которые будут применены к маршруту.
      * @return void
      */
-    public function get(string $uri, string $controller): void
+    public function get(
+        string $uri,
+        string $controller,
+        array  $middleware = []
+    ): void
     {
-        $this->registerRoute('GET', $uri, $controller);
+        $this->registerRoute('GET', $uri, $controller, $middleware);
     }
 
     /**
@@ -59,11 +72,16 @@ class Router
      *
      * @param string $uri URI для которого регистрируется маршрут.
      * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
+     * @param array $middleware Массив middleware, которые будут применены к маршруту.
      * @return void
      */
-    public function post(string $uri, string $controller): void
+    public function post(
+        string $uri,
+        string $controller,
+        array  $middleware = []
+    ): void
     {
-        $this->registerRoute('POST', $uri, $controller);
+        $this->registerRoute('POST', $uri, $controller, $middleware);
     }
 
     /**
@@ -71,11 +89,16 @@ class Router
      *
      * @param string $uri URI для которого регистрируется маршрут.
      * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
+     * @param array $middleware Массив middleware, которые будут применены к маршруту.
      * @return void
      */
-    public function put(string $uri, string $controller): void
+    public function put(
+        string $uri,
+        string $controller,
+        array  $middleware = []
+    ): void
     {
-        $this->registerRoute('PUT', $uri, $controller);
+        $this->registerRoute('PUT', $uri, $controller, $middleware);
     }
 
     /**
@@ -83,11 +106,16 @@ class Router
      *
      * @param string $uri URI для которого регистрируется маршрут.
      * @param string $controller Контроллер, который будет обрабатывать запрос для указанного URI.
+     * @param array $middleware Массив middleware, которые будут применены к маршруту.
      * @return void
      */
-    public function delete(string $uri, string $controller): void
+    public function delete(
+        string $uri,
+        string $controller,
+        array  $middleware = []
+    ): void
     {
-        $this->registerRoute('DELETE', $uri, $controller);
+        $this->registerRoute('DELETE', $uri, $controller, $middleware);
     }
 
     /**
@@ -136,6 +164,10 @@ class Router
                     }
                 }
                 if ($match) {
+                    foreach ($route['middleware'] as $middleware) {
+                        (new Authorize())->handle($middleware);
+                    }
+
                     // Формируем полное имя класса контроллера с namespace
                     $controller = 'App\\Controllers\\' . $route['controller'];
                     $controllerMethod = $route['controllerMethod'];
