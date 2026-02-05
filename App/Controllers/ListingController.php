@@ -346,4 +346,44 @@ class ListingController
             redirect('/listings/' . $id);
         }
     }
+
+    /**
+     * Поиск объявлений по ключевым словам
+     *
+     * @return void
+     */
+    public function search(): void
+    {
+        $keywords = isset($_GET['keywords']) ? trim($_GET['keywords']) : '';
+        $location = isset($_GET['location']) ? trim($_GET['location']) : '';
+
+        $query = "SELECT * FROM listings 
+                  WHERE (
+                     title LIKE :title_keywords 
+                        OR description LIKE :description_keywords 
+                        OR tags LIKE :tags_keywords 
+                        OR company LIKE :company_keywords
+                     )
+                     AND (
+                     city LIKE :city_location
+                        OR state LIKE :state_location
+                     )";
+
+        $params = [
+            'title_keywords' => "%{$keywords}%",
+            'description_keywords' => "%{$keywords}%",
+            'tags_keywords' => "%{$keywords}%",
+            'company_keywords' => "%{$keywords}%",
+            'city_location' => "%{$location}%",
+            'state_location' => "%{$location}%",
+        ];
+
+        $listings = $this->db->query($query, $params)->fetchAll();
+
+        loadView('listings/index', [
+            'listings' => $listings,
+            'keywords' => $keywords,
+            'location' => $location,
+        ]);
+    }
 }
