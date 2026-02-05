@@ -29,19 +29,16 @@ class Authorize
      * @param string $role Роль доступа: 'auth' или 'guest'.
      * @return bool
      */
-    public function handle(string $role): bool
+    public function handle(string $role): void
     {
         // Роут для гостей, но пользователь залогинен → на главную
         if ($role === 'guest' && $this->isAuthenticated()) {
             redirect('/');
-            return false;
         }
 
         // Роут для авторизованных, но пользователь НЕ залогинен → на логин
         if ($role === 'auth' && !$this->isAuthenticated()) {
             redirect('/auth/login');
-            return false;
         }
-        return true;
     }
 }
