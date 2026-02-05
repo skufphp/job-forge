@@ -52,8 +52,7 @@ class ListingController
         $listings = $this->db->query
         (
             'SELECT * FROM listings 
-             ORDER BY created_at 
-             DESC'
+             ORDER BY created_at DESC'
         )->fetchAll();
 
         loadView('listings/index', [
@@ -197,22 +196,22 @@ class ListingController
             'id' => $id
         ];
 
-        // Проверяем, существует ли объявление
+        // Получаем объявление из БД
         $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
 
-        // Если не существует — показываем 404
+        // Проверяем, существует ли объявление. Если не существует — показываем 404
         if (!$listing) {
             ErrorController::notFound('Listing not found.');
-        }
-
-        // Авторизация
-        if (!Authorization::isOwner($listing->user_id)) {
-            Session::setFlashMessage('error_message', 'You are not authorized to delete this listing.');
-            redirect('/listings/' . $listing->id);
             return;
         }
 
-        // Удаляем объявление
+        // АВТОРИЗАЦИЯ: проверяем, владеет ли пользователь этим объявлением
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to delete this listing.');
+            redirect('/listings/' . $listing->id);
+        }
+
+        // Если всё ок — удаляем объявление
         $this->db->query("DELETE FROM listings WHERE id = :id", $queryParams);
 
         // Установка flash-сообщения
@@ -251,6 +250,12 @@ class ListingController
             return;
         }
 
+        // АВТОРИЗАЦИЯ: проверяем, владеет ли пользователь этим объявлением
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to update this listing.');
+            redirect('/listings/' . $listing->id);
+        }
+
         // Загружаем представление с данными
         loadView('listings/edit', [
             'listing' => $listing
@@ -286,6 +291,12 @@ class ListingController
         if (!$listing) {
             ErrorController::notFound('Listing not found.');
             return;
+        }
+
+        // АВТОРИЗАЦИЯ: проверяем, владеет ли пользователь этим объявлением
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to update this listing.');
+            redirect('/listings/' . $listing->id);
         }
 
         $allowedFields = [

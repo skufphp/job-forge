@@ -15,7 +15,11 @@ namespace Framework;
 class Session
 {
     /**
-     * Начало сессии
+     * Начинает сессию, если она еще не запущена
+     *
+     * Проверяет текущий статус сессии и запускает ее только в том случае,
+     * если сессия еще не была инициализирована. Это предотвращает ошибки
+     * при повторном вызове session_start().
      *
      * @return void
      */
@@ -75,6 +79,9 @@ class Session
     /**
      * Очистить все данные сессии
      *
+     * Удаляет все переменные из текущей сессии и уничтожает сессию полностью.
+     * После вызова этого метода сессия будет завершена и все данные будут потеряны.
+     *
      * @return void
      */
     public static function clearAll(): void
@@ -86,8 +93,8 @@ class Session
     /**
      * Установить flash-сообщение
      *
-     * @param string $key Ключ для flash-сообщения.
-     * @param string $message Текст сообщения.
+     * @param string $key Ключ для идентификации flash-сообщения (например, 'success', 'error').
+     * @param string $message Текст сообщения для отображения пользователю.
      * @return void
      */
     public static function setFlashMessage(string $key, string $message): void
@@ -96,11 +103,11 @@ class Session
     }
 
     /**
-     * Get a flash message and unset it
+     * Получить flash-сообщение и удалить его из сессии
      *
-     * @param string $key
-     * @param mixed $default
-     * @return string|null
+     * @param string $key Ключ flash-сообщения.
+     * @param mixed $default Значение по умолчанию, если сообщение не найдено.
+     * @return string|null Текст flash-сообщения или значение по умолчанию.
      */
     public static function getFlashMessage(string $key, mixed $default = null): string|null
     {
