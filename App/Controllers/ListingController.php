@@ -250,6 +250,12 @@ class ListingController
             return;
         }
 
+        // АВТОРИЗАЦИЯ: проверяем, владеет ли пользователь этим объявлением
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to update this listing.');
+            redirect('/listings/' . $listing->id);
+        }
+
         // Загружаем представление с данными
         loadView('listings/edit', [
             'listing' => $listing
@@ -287,11 +293,10 @@ class ListingController
             return;
         }
 
-        // Авторизация
+        // АВТОРИЗАЦИЯ: проверяем, владеет ли пользователь этим объявлением
         if (!Authorization::isOwner($listing->user_id)) {
             Session::setFlashMessage('error_message', 'You are not authorized to update this listing.');
             redirect('/listings/' . $listing->id);
-            return;
         }
 
         $allowedFields = [
