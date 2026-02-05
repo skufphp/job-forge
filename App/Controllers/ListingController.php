@@ -288,6 +288,13 @@ class ListingController
             return;
         }
 
+        // Авторизация
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage('error_message', 'You are not authorized to update this listing.');
+            redirect('/listings/' . $listing->id);
+            return;
+        }
+
         $allowedFields = [
             'title', 'description', 'salary', 'requirements', 'benefits',
             'company', 'address', 'city', 'state', 'phone', 'email', 'tags'
